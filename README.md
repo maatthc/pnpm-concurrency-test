@@ -20,7 +20,9 @@ On your local machine, create an empty folder to accommodate the shared Virtual 
 
 `mkdir -p /tmp/.pnpm-store-initial`
 
-## Scenario 1 : Install two different sets of packages in parallel
+## Scenario 1 : Install three different sets of packages in parallel
+
+Each folder (parallel_1, parallel_2, parallel_3) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
 
 _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
 
@@ -37,7 +39,9 @@ bash ./setup.sh parallel_3 &
 
 ```
 docker exec parallel_1 /bin/sh -c "cd /app; pnpm i" &
+sleep 15
 docker exec parallel_2 /bin/sh -c "cd /app; pnpm i" &
+sleep 15
 docker exec parallel_3 /bin/sh -c "cd /app; pnpm i" &
 
 ```
@@ -82,13 +86,68 @@ PWD: '/'
 
 ```
 
-## Scenario 2 : Install a third different set of packages by itself
+## Scenario 2 : Install three different sets of packages in parallel
+
+Ps: run the command at "Clean up" and "Local setup" before executing this scenario.
+
+Each folder (parallel_1 and parallel_2) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
+
+_Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
+
+### Start the new Containers and Setup Pnpm on it
+
+```
+bash ./setup.sh parallel_1 &
+bash ./setup.sh parallel_2 &
+
+```
+
+### Trigger packages installation on the Containers in parallel using Pnpm
+
+```
+docker exec parallel_1 /bin/sh -c "cd /app; pnpm i" &
+docker exec parallel_2 /bin/sh -c "cd /app; pnpm i" &
+```
+
+At the end you should see something similar to scenario 1.
+
+### Check if the application is working
+
+Similar to scenario 1.
+
+## Scenario 3 : Install a third different set of packages by itself
 
 Expected behavior : Should reuse packages already installed on the shared Virtual Store and add the new requirements.
 
-## Scenario 3 : Repeat the installation of the third set of packages
+## Scenario 4 : Repeat the installation of the third set of packages
 
 Expected behavior : Should reuse all packages already installed on the shared Virtual Store.
+
+## Findings
+
+### Scenario 1 : Empty Virtual Store and Three containers running
+
+🚨 When the Virtual Store is empty (new server/agent) and we have 3 containers running in parallel, at least one of it will fail with an error similar to:
+
+```
+ERROR  EPERM: operation not permitted, open '/.pnpm-store/v3/files/1e/41f385cc153c21c206dd0849f0d4660b119e8782ab1b5d6b91c52bea0dab256c5c3ff0759a19a59285eebc9522de4a326614f5ddf9b2d6ae7015e78566f7c9'
+```
+
+This is a extreme case: the chances of 3 installation process being running in parallel with an empty Virtual Store are very remote.
+
+Adding an 'pause' of 15s between the executions avoids the issue.
+
+### Scenario 2 : Empty Virtual Store and two containers running
+
+✅ Works without issue.
+
+### Scenario 3 : Existing Virtual Store and new packages required.
+
+✅ Works without issue.
+
+### Scenario 4 : Existing Virtual Store and no new packages required.
+
+✅ Works without issue.
 
 ## Clean up
 
