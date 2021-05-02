@@ -1,0 +1,24 @@
+{
+  "name": "pnpm",
+  "version": "1.0.0",
+  "description": "Testing pnpm on BuiltKite",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexandre Silva",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "aws-sdk": "^2.897.0",
+    "chalk": "^4.1.1",
+    "date-fns": "^2.21.1",
+    "joi": "^17.4.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "pino": "^6.11.3",
+    "uuid": "^8.3.2",
+    "mysql": "^2.18.1",
+    "aws-amplify": "^3.3.22"
+  }
+}
