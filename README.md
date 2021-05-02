@@ -6,6 +6,10 @@ With Pnpm you can "Save disk space and boost installation speed", as it "allows 
 
 But can it be used in a shared/concurrent environment, such as in Continuous Integration agents?
 
+## Version
+
+Tested with pnpm version 6.2.3.
+
 ## Goal
 
 Test if multiple Docker containers can read/update the Virtual Store simultaneously, without corrupting it.
@@ -185,6 +189,14 @@ ERROR  EPERM: operation not permitted, open '/.pnpm-store/v3/files/1e/41f385cc
 This is a extreme case: the chances of 3 installation process being running in parallel with an empty Virtual Store are very remote.
 
 Adding an 'pause' of 15s between the executions avoids the issue.
+
+An workaround would be implementing a simple 'retry' strategy such as:
+
+```
+retry() { eval "$*" || eval "$*" || eval "$*"}
+retry docker exec parallel_1 /bin/sh -c "cd /app; pnpm i"
+
+```
 
 ### Scenario 2 : Empty Virtual Store and two containers running
 
