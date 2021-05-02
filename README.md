@@ -8,15 +8,18 @@ But can it be used in a shared/concurrent environment, such as in Continuous Int
 
 ## Goal
 
-Test if multiple Docker container can read/update the Virtual Store simultaneously, without corrupting it.
+Test if multiple Docker containers can read/update the Virtual Store simultaneously, without corrupting it.
 
 ## Prerequisite
 
-You will need Bash/Docker/git installed on your machine.
+You will need Bash/Docker/Git installed on your machine.
 
 ## Local setup
 
-On your local machine, create an empty folder to accommodate the shared Virtual Store:
+On your local machine:
+
+- Clone this repo.
+- Create an empty folder to accommodate the shared Virtual Store:
 
 `mkdir -p /tmp/.pnpm-store-initial`
 
@@ -119,9 +122,55 @@ Similar to scenario 1.
 
 Expected behavior : Should reuse packages already installed on the shared Virtual Store and add the new requirements.
 
+### Start the new Containers and Setup Pnpm on it
+
+```
+bash ./setup.sh standalone_1
+
+```
+
+### Trigger packages installation on the Container
+
+```
+docker exec standalone_1 /bin/sh -c "cd /app; pnpm i"
+```
+
+You should find one line similar to:
+
+`Progress: resolved 200, reused 52, downloaded 148, added 200, done`
+
+That shows that 52 packages were reused and another 148 new packages were downloaded.
+
+### Check if the application is working
+
+Similar to scenario 1.
+
 ## Scenario 4 : Repeat the installation of the third set of packages
 
 Expected behavior : Should reuse all packages already installed on the shared Virtual Store.
+
+### Start the new Containers and Setup Pnpm on it
+
+```
+bash ./setup.sh standalone_2
+
+```
+
+### Trigger packages installation on the Container
+
+```
+docker exec standalone_2 /bin/sh -c "cd /app; pnpm i"
+```
+
+You should find one line similar to:
+
+`Progress: resolved 200, reused 200, downloaded 0, added 200, done`
+
+That shows that 200 packages were reused and no new packages were downloaded.
+
+### Check if the application is working
+
+Similar to scenario 1.
 
 ## Findings
 
@@ -159,4 +208,4 @@ Adding an 'pause' of 15s between the executions avoids the issue.
 
 ## Next steps
 
-Share the same Virtual Store in a BuiltKite agent and run multiple pipelines simultaneously.
+Share the same Virtual Store in a CI agent and run multiple pipelines simultaneously.
