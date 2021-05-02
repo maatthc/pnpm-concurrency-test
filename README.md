@@ -42,13 +42,21 @@ docker exec parallel_3 /bin/sh -c "cd /app; pnpm i" &
 
 ```
 
-At the end you should see something similar to:
+At the end you should see something similar to the bellow, for each container:
 
 ```
 
-Progress: resolved 81, reused 2, downloaded 79, added 81, done
-..
-Progress: resolved 52, reused 0, downloaded 52, added 52, done
+dependencies:
++ @hapi/joi 17.1.1 deprecated
++ aws-sdk 2.897.0
++ bluebird 3.7.2
++ coffee-script 1.12.7 deprecated
++ date-fns 2.21.1
++ lodash 4.17.21
++ moment 2.29.1
++ pino 6.11.3
++ request 2.88.2 deprecated
++ uuid 8.3.2
 
 ```
 
