@@ -43,7 +43,7 @@ _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/
 ### Start the new Containers and Setup Pnpm on it
 
 ```
-bash ./setup.sh parallel_1 &
+bash ./setup.sh parallel_1
 bash ./setup.sh parallel_2 &
 bash ./setup.sh parallel_3 &
 
