@@ -4,10 +4,10 @@ A "Fast, disk space efficient package manager" - https://pnpm.io/
 
 It makes use of a shared content-addressable **Virtual Store**, what can :
 - "Save disk space and boost installation speed", by saving all files in a single place on the disk.
-- "allows you to share dependencies of the same version across projects".
+- "Allows you to share dependencies of the same version across projects".
 - Store multiple versions of the same package on one location.
 - "If you depend on different versions of the dependency, only the files that differ are added to the store."
-- ridiculously fast: https://pnpm.io/benchmarks
+- Ridiculously fast: https://pnpm.io/benchmarks
 
 **But can it be used in a shared/concurrent environment, such as in Continuous Integration agents?**
 
