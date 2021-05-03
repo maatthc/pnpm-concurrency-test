@@ -13,9 +13,16 @@ But can it be used in a shared/concurrent environment, such as in Continuous Int
 ## Versions
 
 Tested with :
+
  - MacOs 10.14.6
  - pnpm version 6.2.3
  - Docker Desktop 3.3.1
+
+And:
+
+ - Amazon Linux 2: 4.14.231-173.360.amzn2.x86_64 - partition / type xfs (rw,noatime,attr2,inode64,noquota)
+ - pnpm version 6.2.3
+ - Docker 20.10.4, build d3cb89e
 
 ## Goal
 
