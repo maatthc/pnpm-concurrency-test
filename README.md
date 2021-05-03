@@ -6,9 +6,12 @@ With Pnpm you can "Save disk space and boost installation speed", as it "allows 
 
 But can it be used in a shared/concurrent environment, such as in Continuous Integration agents?
 
-## Version
+## Versions
 
-Tested with pnpm version 6.2.3.
+Tested with :
+ - MacOs 10.14.6
+ - pnpm version 6.2.3
+ - Docker Desktop 3.3.1
 
 ## Goal
 
