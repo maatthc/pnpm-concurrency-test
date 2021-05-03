@@ -46,7 +46,7 @@ On your local machine:
 
 Each folder (parallel_1, parallel_2 ...) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
 
-_Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
+**Expected behavior** : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
 
 ### Start the new Containers and Setup Pnpm on it
 
@@ -112,7 +112,7 @@ As we couln't run 5 containers in parallel using MacOs, lets try run only 2.
 
 Each folder (parallel_1 and parallel_2) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
 
-_Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
+**Expected behavior** : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
 
 ### Start the new Containers and Setup Pnpm on it
 
@@ -136,7 +136,7 @@ Similar to scenario 1.
 
 ## Scenario 3 : Install a third different set of packages by itself
 
-Expected behavior : Should reuse packages already installed on the shared Virtual Store and add the new requirements.
+**Expected behavior** : Should reuse packages already installed on the shared Virtual Store and add the new requirements.
 
 ### Start the new Containers and Setup Pnpm on it
 
@@ -162,7 +162,7 @@ Similar to scenario 1.
 
 ## Scenario 4 : Repeat the installation of the third set of packages
 
-Expected behavior : Should reuse all packages already installed on the shared Virtual Store.
+**Expected behavior **: Should reuse all packages already installed on the shared Virtual Store.
 
 ### Start the new Containers and Setup Pnpm on it
 
