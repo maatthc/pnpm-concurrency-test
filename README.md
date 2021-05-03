@@ -8,7 +8,12 @@ It makes use of a shared content-addressable **Virtual Store**, what can :
 - Store multiple versions of the same package.
 - "If you depend on different versions of the dependency, only the files that differ are added to the store."
 
-But can it be used in a shared/concurrent environment, such as in Continuous Integration agents?
+**But can it be used in a shared/concurrent environment, such as in Continuous Integration agents?**
+
+## Goal
+
+Test if multiple Docker containers can read/update the Virtual Store simultaneously, without corrupting it, as it would happen in a CI agent running concurrent pipelines.
+
 
 ## Versions
 
@@ -23,10 +28,6 @@ Tested with :
  - MacOs 10.14.6
  - pnpm version 6.2.3
  - Docker Desktop 3.3.1
-
-## Goal
-
-Test if multiple Docker containers can read/update the Virtual Store simultaneously, without corrupting it.
 
 ## Prerequisite
 
