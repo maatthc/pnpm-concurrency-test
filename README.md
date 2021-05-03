@@ -46,7 +46,6 @@ _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/
 bash ./setup.sh parallel_1
 bash ./setup.sh parallel_2 &
 bash ./setup.sh parallel_3 &
-
 ```
 
 ### Trigger packages installation on the Containers in parallel using Pnpm
@@ -57,13 +56,11 @@ sleep 15
 docker exec parallel_2 /bin/sh -c "cd /app; pnpm i" &
 sleep 15
 docker exec parallel_3 /bin/sh -c "cd /app; pnpm i" &
-
 ```
 
 At the end you should see something similar to the bellow, for each container:
 
 ```
-
 dependencies:
 + @hapi/joi 17.1.1 deprecated
 + aws-sdk 2.897.0
@@ -75,7 +72,6 @@ dependencies:
 + pino 6.11.3
 + request 2.88.2 deprecated
 + uuid 8.3.2
-
 ```
 
 ### Check if the application is working
@@ -87,7 +83,6 @@ Run on each one of the 3 containers:
 The output should be similar to:
 
 ```
-
 {
 NODE_VERSION: '14.16.1',
 HOSTNAME: '44b2cfd34975',
@@ -97,7 +92,6 @@ PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
 PWD: '/'
 }
 ^C
-
 ```
 
 ## Scenario 2 : Install three different sets of packages in parallel
@@ -113,7 +107,6 @@ _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/
 ```
 bash ./setup.sh parallel_1 &
 bash ./setup.sh parallel_2 &
-
 ```
 
 ### Trigger packages installation on the Containers in parallel using Pnpm
@@ -137,7 +130,6 @@ Expected behavior : Should reuse packages already installed on the shared Virtua
 
 ```
 bash ./setup.sh standalone_1
-
 ```
 
 ### Trigger packages installation on the Container
@@ -164,7 +156,6 @@ Expected behavior : Should reuse all packages already installed on the shared Vi
 
 ```
 bash ./setup.sh standalone_2
-
 ```
 
 ### Trigger packages installation on the Container
@@ -202,7 +193,6 @@ An workaround would be implementing a simple 'retry' strategy such as:
 ```
 retry() { eval "$*" || eval "$*" || eval "$*"}
 retry docker exec parallel_1 /bin/sh -c "cd /app; pnpm i"
-
 ```
 
 ### Scenario 2 : Empty Virtual Store and two containers running
