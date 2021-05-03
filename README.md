@@ -14,15 +14,15 @@ But can it be used in a shared/concurrent environment, such as in Continuous Int
 
 Tested with :
 
- - MacOs 10.14.6
- - pnpm version 6.2.3
- - Docker Desktop 3.3.1
-
-And:
-
  - Amazon Linux 2: 4.14.231-173.360.amzn2.x86_64 - partition / type xfs (rw,noatime,attr2,inode64,noquota)
  - pnpm version 6.2.3
  - Docker 20.10.4, build d3cb89e
+ 
+ And:
+ 
+ - MacOs 10.14.6
+ - pnpm version 6.2.3
+ - Docker Desktop 3.3.1
 
 ## Goal
 
@@ -41,9 +41,9 @@ On your local machine:
 
 `mkdir -p /tmp/.pnpm-store-initial`
 
-## Scenario 1 : Install three different sets of packages in parallel
+## Scenario 1 : Install five different sets of packages in parallel
 
-Each folder (parallel_1, parallel_2, parallel_3) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
+Each folder (parallel_1, parallel_2 ...) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
 
 _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/.pnpm-store-initial) without corrupting it.
 
@@ -53,16 +53,18 @@ _Expected behavior_ : Should install packages on the shared Virtual Store (/tmp/
 bash ./setup.sh parallel_1
 bash ./setup.sh parallel_2 &
 bash ./setup.sh parallel_3 &
+bash ./setup.sh parallel_4 &
+bash ./setup.sh parallel_5 &
 ```
 
 ### Trigger packages installation on the Containers in parallel using Pnpm
 
 ```
 docker exec parallel_1 /bin/sh -c "cd /app; pnpm i" &
-sleep 15
 docker exec parallel_2 /bin/sh -c "cd /app; pnpm i" &
-sleep 15
 docker exec parallel_3 /bin/sh -c "cd /app; pnpm i" &
+docker exec parallel_4 /bin/sh -c "cd /app; pnpm i" &
+docker exec parallel_5 /bin/sh -c "cd /app; pnpm i" &
 ```
 
 At the end you should see something similar to the bellow, for each container:
@@ -83,7 +85,7 @@ dependencies:
 
 ### Check if the application is working
 
-Run on each one of the 3 containers:
+Run on each one of the 5 containers:
 
 `docker exec parallel_1 /bin/sh -c "node /app/src/index.js"`
 
@@ -101,9 +103,11 @@ PWD: '/'
 ^C
 ```
 
-## Scenario 2 : Install three different sets of packages in parallel
+## Scenario 2 : Install two different sets of packages in parallel
 
 Ps: run the command at "Clean up" and "Local setup" before executing this scenario.
+
+As we couln't run 5 containers in parallel using MacOs, lets try run only 2.
 
 Each folder (parallel_1 and parallel_2) contain a different package.json file : most of the dependencies are common among it and some are unique to each one.
 
@@ -183,9 +187,11 @@ Similar to scenario 1.
 
 ## Findings
 
-### Scenario 1 : Empty Virtual Store and Three containers running
+### Scenario 1 : Empty Virtual Store and Five containers running
 
-🚨 When the Virtual Store is empty (new server/agent) and we have 3 containers running in parallel, at least one of it will fail with an error similar to:
+✅ Linux: Works without issue.
+
+🚨 MacOS: When the Virtual Store is empty (new server/agent) and we have 3 ou more containers running in parallel, at least one of it will fail with an error similar to:
 
 ```
 ERROR  EPERM: operation not permitted, open '/.pnpm-store/v3/files/1e/41f385cc153c21c206dd0849f0d4660b119e8782ab1b5d6b91c52bea0dab256c5c3ff0759a19a59285eebc9522de4a326614f5ddf9b2d6ae7015e78566f7c9'
@@ -193,7 +199,7 @@ ERROR  EPERM: operation not permitted, open '/.pnpm-store/v3/files/1e/41f385cc
 
 This is a extreme case: the chances of 3 installation process being running in parallel with an empty Virtual Store are very remote.
 
-Adding an 'pause' of 15s between the executions avoids the issue.
+Adding an 'pause' of 15 seconds between the executions seems to minimaze the issue.
 
 An workaround would be implementing a simple 'retry' strategy such as:
 
@@ -202,17 +208,18 @@ retry() { eval "$*" || eval "$*" || eval "$*"}
 retry docker exec parallel_1 /bin/sh -c "cd /app; pnpm i"
 ```
 
+
 ### Scenario 2 : Empty Virtual Store and two containers running
 
-✅ Works without issue.
+✅✅ Works without issue on both platforms.
 
 ### Scenario 3 : Existing Virtual Store and new packages required.
 
-✅ Works without issue.
+✅✅ Works without issue on both platforms.
 
 ### Scenario 4 : Existing Virtual Store and no new packages required.
 
-✅ Works without issue.
+✅✅ Works without issue on both platforms.
 
 ## Clean up
 
